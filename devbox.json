@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
+  "packages": [
+    "go@1.25.2",
+    "just@latest"
+  ],
+  "env": {                                                          
+    "GOMODCACHE": "$HOME/.go"                                   
+  },
+  "shell": {
+    "init_hook": [
+      "cp pre-commit.sh .git/hooks/pre-commit"
+    ]
+  }
+}
