@@ -11,7 +11,7 @@ import (
 
 func TestGen(t *testing.T) {
 	var stdout, stderr bytes.Buffer
-	args := []string{"qr-write", "https://josephcosentino.me", "/tmp/qr-code.png"}
+	args := []string{"qr-gen", "https://josephcosentino.me", "/tmp/qr-code.png"}
 
 	err := cli.CmdGen(args, &stdout, &stderr)
 	if err != nil {
