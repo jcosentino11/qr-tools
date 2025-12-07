@@ -14,24 +14,24 @@ build:
     go build -o bin/{{encode_binary_name}} ./cmd/encode
     go build -o bin/{{decode_binary_name}} ./cmd/decode
 
-test:
+test: vet
     go test -v -coverpkg=./internal -coverprofile=coverage.out ./...
     go tool cover -html=coverage.out -o coverage.html
 
-integration-test:                
+integration-test: vet            
     go test -v -tags=integration -coverpkg=./internal -coverprofile=coverage.integration.out ./tests
     go tool cover -html=coverage.integration.out -o coverage.integration.html
 
 benchmark:                                        
     go test -bench=. ./... | tee benchmark.out
 
-fmt:
+format:
     go fmt ./...
 
 vet:
     go vet ./...
 
-check: fmt vet test integration-test
+check: format test integration-test    
 
 clean:
     rm -rf bin/
