@@ -1,15 +1,18 @@
 default:
     @just --list
 
-qr-decode:
-    go run ./cmd/decode
-
-qr-encode:
+encode:
     go run ./cmd/encode
 
+decode:
+    go run ./cmd/decode
+
+encode_binary_name := `awk -F'"' '/EncodeBinaryName.*=/ {print $2}' internal/config/constants.go`
+decode_binary_name := `awk -F'"' '/DecodeBinaryName.*=/ {print $2}' internal/config/constants.go`
+
 build:
-    go build -o bin/qr-decode ./cmd/decode
-    go build -o bin/qr-encode ./cmd/encode
+    go build -o bin/{{encode_binary_name}} ./cmd/encode
+    go build -o bin/{{decode_binary_name}} ./cmd/decode
 
 test:
     go test -v -coverpkg=./internal -coverprofile=coverage.out ./...

@@ -15,6 +15,7 @@ import (
 	"github.com/makiuchi-d/gozxing"
 	"github.com/makiuchi-d/gozxing/qrcode"
 	"josephcosentino.me/qr-code-tool/internal/cli"
+	"josephcosentino.me/qr-code-tool/internal/config"
 )
 
 func Encode(t *testing.T, qrCode, qrCodeFile string) (bytes.Buffer, bytes.Buffer) {
@@ -22,7 +23,7 @@ func Encode(t *testing.T, qrCode, qrCodeFile string) (bytes.Buffer, bytes.Buffer
 
 	var stdout, stderr bytes.Buffer
 	err := cli.CmdEncode(
-		[]string{"qr-encode", qrCode, qrCodeFile},
+		[]string{config.EncodeBinaryName, qrCode, qrCodeFile},
 		&stdout,
 		&stderr,
 	)
@@ -38,7 +39,7 @@ func Decode(t *testing.T, qrCodeFile string) string {
 
 	var stdout, stderr bytes.Buffer
 	err := cli.CmdDecode(
-		[]string{"qr-decode", qrCodeFile},
+		[]string{config.DecodeBinaryName, qrCodeFile},
 		&stdout,
 		&stderr,
 	)
@@ -57,7 +58,7 @@ func Decode(t *testing.T, qrCodeFile string) string {
 func DecodeSample(t *testing.T, sampleFilename string) string {
 	t.Helper()
 
-	path := filepath.Join("..", "samples", sampleFilename)
+	path := filepath.Join("..", SamplesDir, sampleFilename)
 
 	if _, err := os.Stat(path); err != nil {
 		t.Fatalf("sample image not found: %s (error: %v)", sampleFilename, err)
