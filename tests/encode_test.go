@@ -3,34 +3,20 @@
 package tests
 
 import (
-	"bytes"
 	"testing"
-
-	"josephcosentino.me/qr-code-tool/internal/cli"
 )
 
 func TestEncode(t *testing.T) {
 	t.Skip("Skip until encode is implemented")
 
-	qrCode := "https://josephcosentino.me"
+	expectedQrCode := "https://josephcosentino.me"
 	qrCodeFile := "/tmp/qr-code.png"
 
-	var stdout, stderr bytes.Buffer
-	err := cli.CmdEncode(
-		[]string{"qr-encode", qrCode, qrCodeFile},
-		&stdout,
-		&stderr,
-	)
-	if err != nil {
-		t.Fatalf("Command failed: %v", err)
-	}
+	_, _ = Encode(t, expectedQrCode, qrCodeFile)
 
-	actualQrCode, err := ReadQRCode(qrCodeFile)
-	if err != nil {
-		t.Fatalf("Unable to read QR code from %s: %v", qrCodeFile, err)
-	}
+	actualQrCode := DecodeWithExternalLib(t, qrCodeFile)
 
-	if actualQrCode != qrCode {
-		t.Fatalf("QR Code does not match. expected: %s, actual: %s", qrCode, actualQrCode)
+	if expectedQrCode != actualQrCode {
+		t.Fatalf("QR Code does not match. expected: %s, actual: %s", expectedQrCode, actualQrCode)
 	}
 }

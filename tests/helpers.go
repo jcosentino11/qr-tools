@@ -1,61 +1,98 @@
 package tests
 
 import (
+	"bytes"
 	"image"
 	_ "image/gif"
 	_ "image/jpeg"
 	_ "image/png"
+	"path/filepath"
 
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/makiuchi-d/gozxing"
 	"github.com/makiuchi-d/gozxing/qrcode"
+	"josephcosentino.me/qr-code-tool/internal/cli"
 )
 
-func SampleImagePath(t *testing.T, filename string) string {
+func Encode(t *testing.T, qrCode, qrCodeFile string) (bytes.Buffer, bytes.Buffer) {
 	t.Helper()
 
-	path := filepath.Join("..", "samples", filename)
-
-	if _, err := os.Stat(path); err != nil {
-		t.Fatalf("sample image not found: %s (error: %v)", filename, err)
+	var stdout, stderr bytes.Buffer
+	err := cli.CmdEncode(
+		[]string{"qr-encode", qrCode, qrCodeFile},
+		&stdout,
+		&stderr,
+	)
+	if err != nil {
+		t.Fatalf("Command failed: %v", err)
 	}
 
-	return path
+	return stdout, stderr
 }
 
-func ReadQRCode(path string) (string, error) {
-	img, err := LoadImage(path)
+func Decode(t *testing.T, qrCodeFile string) string {
+	t.Helper()
+
+	var stdout, stderr bytes.Buffer
+	err := cli.CmdDecode(
+		[]string{"qr-decode", qrCodeFile},
+		&stdout,
+		&stderr,
+	)
 	if err != nil {
-		return "", err
+		t.Fatalf("Decoding failed: %v", err)
 	}
+
+	return stdout.String()
+}
+
+func DecodeSampleImage(t *testing.T, qrCodeFile string) string {
+	t.Helper()
+
+	path := filepath.Join("..", "samples", qrCodeFile)
+
+	if _, err := os.Stat(path); err != nil {
+		t.Fatalf("sample image not found: %s (error: %v)", qrCodeFile, err)
+	}
+
+	return Decode(t, path)
+}
+
+func DecodeWithExternalLib(t *testing.T, path string) string {
+	t.Helper()
+
+	img := LoadImage(t, path)
 
 	bmp, err := gozxing.NewBinaryBitmapFromImage(img)
 	if err != nil {
-		return "", err
+		t.Fatalf("unable to create image bitmap: %v", err)
 	}
 
 	reader := qrcode.NewQRCodeReader()
 
 	result, err := reader.Decode(bmp, nil)
 	if err != nil {
-		return "", err
+		t.Fatalf("unable to decode image bitmap: %v", err)
 	}
 
-	return result.GetText(), nil
+	return result.GetText()
 }
 
-func LoadImage(path string) (image.Image, error) {
+func LoadImage(t *testing.T, path string) image.Image {
+	t.Helper()
+
 	reader, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		t.Fatalf("unable to open image path %s: %v", path, err)
 	}
 	defer reader.Close()
+
 	img, _, err := image.Decode(reader)
 	if err != nil {
-		return nil, err
+		t.Fatalf("unable to decode image: %v", err)
 	}
-	return img, err
+
+	return img
 }
