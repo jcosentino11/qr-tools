@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	if err := cli.CmdGen(os.Args, os.Stdout, os.Stderr); err != nil {
+	if err := cli.CmdDecode(os.Args, os.Stdout, os.Stderr); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
 		os.Exit(1)
 	}

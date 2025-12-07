@@ -1,15 +1,15 @@
 default:
     @just --list
 
-qr-read:
-    go run ./cmd/read
+qr-decode:
+    go run ./cmd/decode
 
-qr-gen:
-    go run ./cmd/gen
+qr-encode:
+    go run ./cmd/encode
 
 build:
-    go build -o bin/qr-read ./cmd/read
-    go build -o bin/qr-gen ./cmd/gen
+    go build -o bin/qr-decode ./cmd/decode
+    go build -o bin/qr-encode ./cmd/encode
 
 test:
     go test -v -coverpkg=./internal -coverprofile=coverage.out ./...

@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"io"
 
-	"josephcosentino.me/qr-code-tool/internal/reader"
+	"josephcosentino.me/qr-code-tool/internal/decoder"
 )
 
-func CmdRead(args []string, stdout, stderr io.Writer) error {
+func CmdDecode(args []string, stdout, stderr io.Writer) error {
 	path := args[1]
 
-	url, err := reader.Read(path)
+	url, err := decoder.Decode(path)
 	if err != nil {
 		return err
 	}

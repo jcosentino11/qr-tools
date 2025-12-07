@@ -9,15 +9,15 @@ import (
 	"josephcosentino.me/qr-code-tool/internal/cli"
 )
 
-func TestGen(t *testing.T) {
+func TestEncode(t *testing.T) {
 	t.Skip("Skip until encode is implemented")
 
 	qrCode := "https://josephcosentino.me"
 	qrCodeFile := "/tmp/qr-code.png"
 
 	var stdout, stderr bytes.Buffer
-	err := cli.CmdGen(
-		[]string{"qr-gen", qrCode, qrCodeFile},
+	err := cli.CmdEncode(
+		[]string{"qr-encode", qrCode, qrCodeFile},
 		&stdout,
 		&stderr,
 	)
