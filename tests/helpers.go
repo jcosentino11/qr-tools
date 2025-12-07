@@ -54,13 +54,13 @@ func Decode(t *testing.T, qrCodeFile string) string {
 	return res
 }
 
-func DecodeSampleImage(t *testing.T, qrCodeFile string) string {
+func DecodeSample(t *testing.T, sampleFilename string) string {
 	t.Helper()
 
-	path := filepath.Join("..", "samples", qrCodeFile)
+	path := filepath.Join("..", "samples", sampleFilename)
 
 	if _, err := os.Stat(path); err != nil {
-		t.Fatalf("sample image not found: %s (error: %v)", qrCodeFile, err)
+		t.Fatalf("sample image not found: %s (error: %v)", sampleFilename, err)
 	}
 
 	return Decode(t, path)

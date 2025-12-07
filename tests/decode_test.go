@@ -11,9 +11,9 @@ func TestDecode(t *testing.T) {
 	t.Skip("Skipping until decoder is implemented")
 
 	expectedQrCode := "https://josephcosentino.me"
-	qrCodeFile := "josephcosentino.me.png"
+	sampleFilename := "josephcosentino.me.png"
 
-	actualQrCode := DecodeSampleImage(t, qrCodeFile)
+	actualQrCode := DecodeSample(t, sampleFilename)
 
 	if expectedQrCode != actualQrCode {
 		t.Fatalf("QR Code does not match. expected: %s, actual: %s", expectedQrCode, actualQrCode)
